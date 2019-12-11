@@ -35,7 +35,7 @@ function getNatParksByState(query, maxResults=10) {
   const params = {
     api_key: apiKey,
     stateCode: query,
-    maxResults,
+    limit: maxResults,
   };
   const queryString = formatQueryParams(params)
   const url = searchURL + '?' + queryString;
