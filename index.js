@@ -2,7 +2,7 @@
 
 // put your own value below!
 const apiKey = 'GDKX2uQIq8fcqFQ7lk5K8kO7zsuKCtNIBrasruea'; 
-const searchURL = 'https://developer.nps.gov/api/v1/alerts';
+const searchURL = 'https://developer.nps.gov/api/v1/parks';
 
 
 function formatQueryParams(params) {
@@ -14,30 +14,28 @@ function formatQueryParams(params) {
 function displayResults(responseJson) {
   // if there are previous results, remove them
   console.log(responseJson);
-  $('#results-list').empty();
+  $('.results-list').empty();
   // iterate through the items array
-  for (let i = 0; i < responseJson.items.length; i++){
+  for (let i = 0; i < responseJson.data.length; i++){
     // for each video object in the items 
     //array, add a list item to the results 
     //list with the video title, description,
     //and thumbnail
-    $('#results-list').append(
-      `<li><h3>${responseJson.items[i].snippet.title}</h3>
-      <p>${responseJson.items[i].snippet.description}</p>
-      <img src='${responseJson.items[i].snippet.thumbnails.default.url}'>
+    $('.results-list').append(
+      `<li><h3>${responseJson.data[i].fullName}</h3>
+      <p>${responseJson.data[i].description}</p>
+      <a href='${responseJson.data[i].url}'>Visit Our Site</a>
       </li>`
     )};
   //display the results section  
-  $('#results').removeClass('hidden');
+  $('.results').removeClass('hidden');
 };
 
-function getNatParks(query, maxResults=10) {
+function getNatParksByState(query, maxResults=10) {
   const params = {
-    key: apiKey,
-    q: query,
-    part: 'snippet',
+    api_key: apiKey,
+    stateCode: query,
     maxResults,
-    type: 'video'
   };
   const queryString = formatQueryParams(params)
   const url = searchURL + '?' + queryString;
@@ -62,7 +60,7 @@ function watchForm() {
     event.preventDefault();
     const searchTerm = $('#js-search-term').val();
     const maxResults = $('#js-max-results').val();
-    getYouTubeVideos(searchTerm, maxResults);
+    getNatParksByState(searchTerm, maxResults);
   });
 }
 
